@@ -1,7 +1,7 @@
 import React from 'react'
 import './Item.css'
 
-export const Item = () => {
+export const Item = (props) => {
   return (
     <div className='item'>
         <img src={props.image} alt=''/>
