@@ -9,13 +9,15 @@ const AddProduct = () => {
             <p>Product title</p>
             <input type='text' name='name' placeholder='Type here'/>
         </div>
-        <div className="add-product-item-field">
-            <p>Price</p>
-            <input type='text' name='old_price' placeholder='Type here'/>
-        </div>
-        <div className="add-product-item-field">
-            <p>Offer price</p>
-            <input type='text' name='new_price' placeholder='Type here'/>
+        <div className="add-product-price">
+            <div className="add-product-item-field">
+                <p>Price</p>
+                <input type='text' name='old_price' placeholder='Type here'/>
+            </div>
+            <div className="add-product-item-field">
+                <p>Offer price</p>
+                <input type='text' name='new_price' placeholder='Type here'/>
+            </div>
         </div>
         <div className="add-product-item-field">
             <p>Product Category</p>
