@@ -201,6 +201,14 @@ app.get('/newcollection',async(req,res)=>{
     res.send(newCollection);
 })
 
+app.get('/popularitems',async(req,res)=>{
+    let products = await Product.find({}); // {category:"women"}
+    let popularItems = products.slice(0,4);
+    console.log("Popular Items Fetched");
+    res.send(popularItems);
+})
+
+
 app.listen(PORT,(error)=> {
     if (!error) {
         console.log("Server Running on Port "+PORT)
