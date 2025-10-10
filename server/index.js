@@ -194,6 +194,13 @@ app.post('/login',async(req,res)=>{
     res.json({success:true,token});
 })
 
+app.get('/newcollection',async(req,res)=>{
+    let products = await Product.find({});
+    let newCollection = products.slice(1).slice(-8);
+    console.log("New Collection Fetched");
+    res.send(newCollection);
+})
+
 app.listen(PORT,(error)=> {
     if (!error) {
         console.log("Server Running on Port "+PORT)
