@@ -1,3 +1,4 @@
+import { set } from 'mongoose';
 import React, { createContext, useEffect, useState } from 'react';
 
 export const ShopContext = createContext(null);
@@ -20,11 +21,25 @@ const ShopContextProvider = (props)=>{
         fetch('http://localhost:4000/allproducts')
         .then((res)=>res.json())
         .then((data)=>{setAllProducts(data)});   
+
+        // fetch cart data if logged in
+        if(localStorage.getItem("auth-token")) {
+            fetch('http://localhost:4000/getcart',{
+                method: 'POST',
+                headers: {
+                    Accept: 'application/form-data',
+                    'auth-token': `${localStorage.getItem("auth-token")}`,
+                    'Content-Type': 'application/json'
+                },
+                body: "",
+            }).then((res)=>res.json())
+            .then((data)=>{setCartItems(data)});
+        }
     },[])
 
     const addToCart = (itemId)=>{
         setCartItems((prev)=>({...prev,[itemId]:prev[itemId]+1}))
-        if(localStorage.getItem("auth-token")) { // means we're logged in
+        if(localStorage.getItem("auth-token")) {
             fetch('http://localhost:4000/addtocart',{
                 method: 'POST',
                 headers: {
@@ -41,7 +56,7 @@ const ShopContextProvider = (props)=>{
 
     const removeFromCart = (itemId)=>{
         setCartItems((prev)=>({...prev,[itemId]:prev[itemId]-1}))
-        if(localStorage.getItem("auth-token")) { // means we're logged in
+        if(localStorage.getItem("auth-token")) {
             fetch('http://localhost:4000/removefromcart',{
                 method: 'POST',
                 headers: {

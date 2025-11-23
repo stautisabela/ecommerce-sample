@@ -242,7 +242,11 @@ app.post('/removefromcart',fetchUser,async(req,res)=>{
 }
 })
 
-
+app.post('/getcart',fetchUser,async(req,res)=>{
+    console.log("Cart data requested");
+    let userData = await Users.findOne({_id:req.user.id});
+    res.json(userData.cartData);
+})
 
 app.listen(PORT,(error)=> {
     if (!error) {
