@@ -208,6 +208,41 @@ app.get('/popularitems',async(req,res)=>{
     res.send(popularItems);
 })
 
+// Middleware for verifying token
+const fetchUser = async (req,res,next)=>{
+    const token = req.header('auth-token');
+    if (!token) {
+        return res.status(401).json({error:"Please authenticate using a valid token."});
+    }
+    try {
+        const data = jwt.verify(token,process.env.JWT_SECRET);
+        req.user = data.user;
+        next();
+    }
+    catch(error) {
+        return res.status(401).json({error:"Please authenticate using a valid token."});
+    }
+}
+
+app.post('/addtocart',fetchUser,async(req,res)=>{
+    console.log("Added: ",req.body.id);
+    let userData = await Users.findOne({_id:req.user.id});
+    userData.cartData[req.body.id] += 1;
+    await Users.findOneAndUpdate({_id:req.user.id},{cartData:userData.cartData});
+    res.send("Product added to cart");
+})
+
+app.post('/removefromcart',fetchUser,async(req,res)=>{
+    console.log("Removed: ",req.body.id);
+    let userData = await Users.findOne({_id:req.user.id});
+    if (userData.cartData[req.body.id] > 0) {
+        userData.cartData[req.body.id] -= 1;
+        await Users.findOneAndUpdate({_id:req.user.id},{cartData:userData.cartData});
+        res.send("Product removed from cart");
+}
+})
+
+
 
 app.listen(PORT,(error)=> {
     if (!error) {
